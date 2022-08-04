@@ -1,0 +1,6 @@
+.directory
+
+dist/
+
+*.gif
+__py*
