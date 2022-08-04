@@ -2,6 +2,12 @@
 
 Simple CLI script to download gifs from tenor.com.
 
+## Installation
+
+```bash
+pip3 install tenor-dl
+```
+
 ## Usage
 
 ```bash
