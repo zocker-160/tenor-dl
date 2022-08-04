@@ -5,22 +5,30 @@ import json
 import requests
 import argparse
 
+import logging
+logging.basicConfig(level=logging.INFO)
+
 from pyquery import PyQuery
 
 def downloadURL(url: str, outLoc: str, urlOnly=False):
-    #URL = "https://tenor.com/view/rage-work-pc-stressed-pissed-gif-15071896"
+    #URL = "https://tenor.com/view/rage-work-pc-stressed-pissed-gif-15071896"   
 
-    print("fetching URL")
+    if urlOnly or outLoc == "-":
+        logger.setLevel(logging.CRITICAL)
+    else:
+        logger.setLevel(logging.INFO)
+
+    logger.debug("fetching URL")
 
     res = requests.get(url)
 
-    print("parsing data")
+    logger.info("parsing data")
 
     pq = PyQuery(res.text)
     jsonData = pq("#store-cache")
 
     if not jsonData:
-        print("ERROR: failed to parse data")
+        logger.critical("ERROR: failed to parse data")
         return
 
     data = json.loads(jsonData.html())
@@ -30,20 +38,20 @@ def downloadURL(url: str, outLoc: str, urlOnly=False):
     name = results["h1_title"]
     url = results["media"][0]["gif"]["url"]
 
-    print("found gif:", name)
+    logger.info("found gif: "+name)
 
     if urlOnly:
-        print("GIF direct link:", url)
+        print(url, end="")
         return
 
-    print("downloading gif...")
+    logger.info("downloading gif...")
 
     gif = requests.get(url)
 
-    print("writing file")
+    logger.info("writing file")
 
     if outLoc == "-":
-        print(gif.content)
+        print(gif.content, end="")
         return
 
     outPath = os.path.join(outLoc, name+".gif")
@@ -51,7 +59,7 @@ def downloadURL(url: str, outLoc: str, urlOnly=False):
     with open(outPath, "wb") as f:
         f.write(gif.content)
 
-    print("done")
+    logger.info("done")
 
 
 def parseArgs():
@@ -72,6 +80,9 @@ def parseArgs():
     return parser.parse_args()
 
 def main():
+    global logger
+    logger = logging.getLogger(":")
+
     CLI = parseArgs()
 
     downloadURL(

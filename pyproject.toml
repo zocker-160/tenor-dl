@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "tenor-dl"
-version = "0.2.0"
+version = "0.2.1"
 description = "simple CLI script to easily download gifs from tenor.com"
 authors = ["zocker-160 <zocker1600@posteo.net>"]
 license = "WTFPL"
