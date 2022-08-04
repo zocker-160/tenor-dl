@@ -18,7 +18,7 @@ def downloadURL(url: str, outLoc: str, urlOnly=False):
     else:
         logger.setLevel(logging.INFO)
 
-    logger.debug("fetching URL")
+    logger.info("fetching URL")
 
     res = requests.get(url)
 
